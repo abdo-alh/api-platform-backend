@@ -39,4 +39,26 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
 
+    miniblog.normalizer.resource_access_exception:
+        class: App\Normalizer\ResourceAccessExceptionNormalizer
+        arguments:
+            - { type: 'App\Exceptions\ResourceAccessException' }
+        tags:
+            - { name: 'miniblog.normalizer'}
+
+    miniblog.normalizer.authentification_exception:
+        class: App\Normalizer\AuthentificationExceptionNormalizer
+        arguments:
+            - { type: 'App\Exceptions\AuthentificationException' }
+        tags:
+            - { name: 'miniblog.normalizer'}
+
+    miniblog.normalizer.authentificationnot_found_exception:
+        class: App\Normalizer\NotFoundExceptionNormalizer
+        arguments:
+            - { type: 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' }
+        tags:
+            - { name: 'miniblog.normalizer'}
+
+
 
