@@ -13,9 +13,9 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ExceptionSubscriber implements EventSubscriberInterface
+class ExceptionSubscriber //implements EventSubscriberInterface
 {
-    private static array $normalizers;
+    /*private static array $normalizers;
     private SerializerInterface $serializer;
     private ExceptionNormalizerFormatterInterface $exceptionNormalizerFormatter;
     private JsonResponseInterface $jsonResponse;
@@ -40,10 +40,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function processException(ExceptionEvent $event)
     {
         $result = null;
-        /** @var \Exception $exception */
         $exception = $event->getThrowable();
 
-        /** @var NormalizerInterface $normalizer */
         foreach (self::$normalizers as $key => $normalizer) {
             if ($normalizer->supports($exception)) {
                 $result = $normalizer->normalize($exception);
@@ -67,5 +65,5 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function addNormalizer(NormalizerInterface $normalizer)
     {
         self::$normalizers[] = $normalizer;
-    }
+    }*/
 }

@@ -12,9 +12,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ResourceUpdatorSubscriber implements EventSubscriberInterface
+class ResourceUpdatorSubscriber //implements EventSubscriberInterface
 {
-    private ResourceUpdatorInterface $resourceUpdator;
+    private $resourceUpdator;
 
     public function __construct(ResourceUpdatorInterface $resourceUpdator)
     {

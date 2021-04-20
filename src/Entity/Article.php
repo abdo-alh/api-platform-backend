@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
+use DateTimeInterface;
 use App\Entity\ArticleUpdatedAt;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ArticleRepository;
@@ -34,7 +36,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Article
 {
-    use Timesampable;
 
     /**
      * @ORM\Id
@@ -61,6 +62,18 @@ class Article
      * @Groups({"article_details_read"})
      */
     private $author;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"article_read","user_details_read","article_details_read"})
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"article_read","user_details_read","article_details_read"})
+     */
+    private $updatedAt;
 
     public function getId(): ?int
     {
@@ -101,5 +114,25 @@ class Article
         $this->author = $author;
 
         return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function setCreatedAt(DateTimeInterface $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 }

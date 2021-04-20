@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use App\Entity\Article;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -83,7 +84,7 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      * @Groups({"user_read","user_details_read","article_details_read"})
      */
-    private $status;
+    private $status = false;
 
     /**
      * @ORM\Column(type="integer")
@@ -91,9 +92,22 @@ class User implements UserInterface
      */
     private $age;
 
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"user_read","user_details_read","article_details_read"})
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"user_read","user_details_read","article_details_read"})
+     */
+    private $updatedAt;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->age = 18;
     }
 
     public function getId(): ?int
@@ -229,5 +243,25 @@ class User implements UserInterface
         $this->age = $age;
 
         return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function setCreatedAt(DateTimeInterface $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Security;
 
 class CurrentUserForArticlesSubscriber implements EventSubscriberInterface
 {
-    private Security $security;
+    private $security;
 
     public function __construct(Security $security)
     {
