@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\ArticleUpdatedAt;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ArticleRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -22,13 +23,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         },
  *         "put",
  *         "patch",
- *         "delete"
+ *         "delete",
+ *         "put_updated_at"={
+ *             "method"="PUT",
+ *             "path"="/articles/{id}/updated-at",
+ *             "controller"=ArticleUpdatedAt::class,
+ *         }
  *     }
  * )
  */
 class Article
 {
-    use Timestamps;
+    use Timesampable;
 
     /**
      * @ORM\Id
