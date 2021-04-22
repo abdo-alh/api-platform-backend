@@ -2,26 +2,50 @@
 
 namespace App\Entity;
 
+use DateTime;
+use Carbon\Carbon;
 use App\Entity\User;
 use DateTimeInterface;
 use App\Entity\ArticleUpdatedAt;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ArticleRepository;
+use App\Controller\PostCountController;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+//for disable the api "openapi_context"={"summary"="hidden"},"read"=false,"output"=false
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  * @ApiResource(
  *     collectionOperations={
  *        "get"={
- *             "normalization_context"={"groups"={"article_read"}}
+ *             "normalization_context"={"groups"={"article_read"},"openapi_definition_name"="Collection"}
  *         },
- *         "post"
+ *         "post",
+ *         "count"={
+ *             "method"="GET",
+ *             "path"="/articles/count",
+ *             "controller"=PostCountController::class,
+ *             "pagination_enabled"=false,
+ *             "filters"={},
+ *             "openapi_context"={
+ *                 "summary"="Permet d'afficher le nombre des articles",
+ *                 "parameters"={},
+ *                 "requestBody"={
+ *                      "content"={
+ *                          "application/json"={
+ *                              "schema"={
+ *                              }
+ *                          }
+ *                      }
+ *                 }
+ *             }
+ *         }
  *     },
  *     itemOperations={
  *         "get"={
- *             "normalization_context"={"groups"={"article_details_read"}}
+ *             "normalization_context"={"groups"={"article_details_read"}, "openapi_definition_name"="Detail"},
  *         },
  *         "put",
  *         "patch",
@@ -30,8 +54,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "method"="PUT",
  *             "path"="/articles/{id}/updated-at",
  *             "controller"=ArticleUpdatedAt::class,
+ *         },
+ *         "publish"={
+ *             "method"="POST",
+ *             "path"="/articles/{id}/publish",
+ *             "controller"=ArticleUpdatedAt::class,
+ *             "openapi_context"={
+ *                 "summary"="Permet de publier un article",
+ *                 "requestBody"={
+ *                      "content"={
+ *                          "application/json"={
+ *                              "schema"={
+ *                              }
+ *                          }
+ *                      }
+ *                 }
+ *             }
  *         }
- *     }
+ *     },
+ *     paginationItemsPerPage=2,
+ *     paginationMaximumItemsPerPage=2
  * )
  */
 class Article
@@ -48,6 +90,13 @@ class Article
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"article_read","user_details_read","article_details_read"})
+     * @ApiProperty(
+     *     attributes={
+     *         "openapi_context"={
+     *             "type"="string"
+     *         }
+     *     }
+     * )
      */
     private $name;
 
@@ -74,6 +123,12 @@ class Article
      * @Groups({"article_read","user_details_read","article_details_read"})
      */
     private $updatedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -121,18 +176,16 @@ class Article
         return $this->createdAt;
     }
 
+    /**
+     * @Groups({"article_read","user_details_read","article_details_read"})
+     */
+    public function getCreatedAtAgo():string
+    {
+        return Carbon::instance($this->getCreatedAt())->diffForHumans();
+    }
+
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    public function setCreatedAt(DateTimeInterface $createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function setUpdatedAt(DateTimeInterface $updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
     }
 }

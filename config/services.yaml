@@ -34,6 +34,16 @@ services:
         arguments: ['@App\Swagger\SwaggerDecorator.inner']
         autoconfigure: false
 
+    App\OpenApi\OpenApiFactory:
+        decorates: 'api_platform.openapi.factory'
+        arguments: [ '@App\OpenApi\OpenApiFactory.inner' ]
+        autoconfigure: false
+
+    App\DataProvider\UserDataProvider:
+        bind:
+            $collectionDataProvider: '@api_platform.doctrine.orm.default.collection_data_provider'
+            $itemDataProvider: '@api_platform.doctrine.orm.default.item_data_provider'
+
     miniblog_api.event.jwt_created_listener:
         class: App\EventListener\JWTCreatedListener
         tags:
